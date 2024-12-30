@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Dashboard com Google Sheets</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        // Carregar a biblioteca do Google Charts
+        google.charts.load('current', { packages: ['corechart'] });
+
+        // Função que desenha o gráfico
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            // URL do Google Sheets
+            const query = new google.visualization.Query(
+                'https://docs.google.com/spreadsheets/d/1AWqLt01k9IuH7RxqfndLSlOPApJHIMxvdOl0bDz1QBo/gviz/tq?sheet=Sheet1'
+            );
+
+            // Enviar consulta e processar os dados
+            query.send(response => {
+                if (response.isError()) {
+                    console.error('Erro ao buscar os dados:', response.getMessage());
+                    return;
+                }
+
+                // Obter os dados e criar o gráfico
+                const data = response.getDataTable();
+                const options = {
+                    title: 'Desempenho por Categoria',
+                    width: 600,
+                    height: 400,
+                    pieHole: 0.4 // Transformar em gráfico de rosca
+                };
+
+                const chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Dashboard com Dados do Google Sheets</h1>
+    <!-- Área onde o gráfico será exibido -->
+    <div id="chart_div">Carregando o gráfico...</div>
+</body>
+</html>
